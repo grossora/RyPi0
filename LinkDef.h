@@ -13,6 +13,7 @@
 #pragma link C++ class larlite::singlepi0+;
 #pragma link C++ class ertool::ERAnaPi0All+;
 #pragma link C++ class larlite::effpi0+;
+#pragma link C++ class larlite::MCtopo+;
 //#pragma link C++ class ertool::ERAnaPi0GunEff+;
 #pragma link C++ class ertool::ERAnarecotopo+;
 //ADD_NEW_CLASS ... do not change this line
