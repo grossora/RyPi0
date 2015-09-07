@@ -60,7 +60,7 @@ namespace larlite {
         // NC = 1
     void SetCCNC(int ccnc) { _ccnc = ccnc ; }
 	// if we are looking for signal
-    void SetCCNC(bool sig) { _sig = sig ; }
+    void SetSignal(bool sig) { _sig = sig ; }
         // change this to string or something as time goes on... or keep a list
         // 0 = inclusive ==> any >1pi0 that is a final state particle (aka Jonathan's Definition)
         // 1 = inclusive ==> any  1 pi0 that is a final state particle

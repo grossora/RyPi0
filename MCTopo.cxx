@@ -71,6 +71,12 @@ if(_sig){
 }// if signal
 
 
+	// THis is not robust.
+	if(!_sig){ 	
+		if(_topo==0) if(pi0==0) return true;// needs to see if this really matters
+		if(_topo==1) if(pi0!=1) return true; 
+		if(_topo==2) if(pi0!=1 && cmeson!=0) return true; 
+		}
   
     return true;
   }
