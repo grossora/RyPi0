@@ -5,7 +5,19 @@
 
 namespace larlite {
 
-  bool MCCosmics::initialize() {
+  bool MCCosmics::initialize()
+ {
+
+        _total_0pi0_events = 0 ;
+        _total_1pi0_events = 0 ;
+        _total_npi0_events = 0 ;
+        _total_events = 0;
+
+        FullTree = new TTree("FullTree","FullTree");
+	FullTree->Branch("cospi0x",&cospi0x,"cospi0x/D");
+
+
+
     return true;
   }
   
@@ -22,12 +34,35 @@ namespace larlite {
         auto mcnu = mctruth->at(0).GetNeutrino();
         auto ev_mcshower = storage->get_data<event_mcshower>("mcreco");// Get the mcshower info
 
-        for(auto const& p : mcpart){
-	std::cout<<"Particle test cosmic cout"<<std::endl;
-	if(p.PdgCode()==111) std::cout<<" Look at all these pi0! " <<p.PdgCode()<<std::endl;
-	}
+	std::vector<int> motherpi0ID;
+	motherpi0ID.clear();
+	std::cout<<" PRE Mother size vect"<<motherpi0ID.size()<<std::endl;
+	for(auto const& mcs: *ev_mcshower){
+	if(mcs.MotherPdgCode()==111){ std::cout<<" Look at all these pi0! from MCS " <<std::endl;
+		std::cout<< " Track ID " <<mcs.MotherTrackID()<<std::endl;
+		std::cout<< " Mother Process " <<mcs.MotherProcess()<<std::endl;
+		std::cout<< " Ancestor Process " <<mcs.AncestorProcess()<<std::endl;
+		std::cout<< " Ancestor PDG " <<mcs.AncestorPdgCode()<<std::endl;
+		std::cout<< " pi0 x pos" <<mcs.MotherEnd().Position().X()<<std::endl;
+		cospi0x = mcs.MotherEnd().Position().X();
+		FullTree->Fill();
+		motherpi0ID.push_back(mcs.MotherTrackID());
+		}
+		}
+	std::sort(motherpi0ID.begin(),motherpi0ID.end());
+	motherpi0ID.erase( unique ( motherpi0ID.begin(),motherpi0ID.end()),motherpi0ID.end());
+
+	std::cout<<" Mother size vect"<<motherpi0ID.size()<<std::endl;
+	
+	//count up things 
+	_total_events++;
+	if(motherpi0ID.size()==0) _total_0pi0_events++;
+	if(motherpi0ID.size()==1) _total_1pi0_events++;
+	if(motherpi0ID.size()>1) _total_npi0_events++;
 
 
+
+	
 
 /*
 //
@@ -92,6 +127,16 @@ if(_sig){
   }
 
   bool MCCosmics::finalize() {
+
+	std::cout<<"SUMMARY OF COSMIC PI0"<<std::endl;
+	std::cout<<" 0 pi0 "<<_total_0pi0_events<< " Percent "<<(double)_total_0pi0_events/_total_events<<std::endl;
+	std::cout<<" 1 pi0 "<<_total_1pi0_events<<" Percent "<<(double)_total_1pi0_events/_total_events<<std::endl;
+	std::cout<<" n pi0 "<<_total_npi0_events<<" Percent "<<(double)_total_npi0_events/_total_events<<std::endl;
+	std::cout<<" total evt"<<_total_events<<std::endl;
+
+     if(_fout){
+	FullTree->Write();
+	}
 
     return true;
   }

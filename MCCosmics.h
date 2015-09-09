@@ -88,6 +88,16 @@ namespace larlite {
 	double _showerenergy;
 	double _showerdetenergy;
 	double _showercontain;
+
+
+	int _total_events;
+	int _total_0pi0_events;
+	int _total_1pi0_events;
+	int _total_npi0_events;
+
+TTree *FullTree;
+
+	double cospi0x;
     
   };
 }

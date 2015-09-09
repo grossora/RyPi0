@@ -11,7 +11,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 # Create algorithm
-
+'''
 my_algo = ertool.AlgoPi0()
 my_algo.setVerbose(False)
 my_algo.setMinShrEnergy(20)
@@ -34,7 +34,7 @@ my_algo4 = ertool.ERAlgoPrimaryPi0()
 my_algo4.SetMinDistVtx(50)
 my_algo4.SetMinDistEnd(50)
 my_algo4.SetVerbose(True)
-
+'''
 # Create MC filter
 my_anaunit = fmwk.Pi0Reco()#ExampleERSelection()
 my_proc = fmwk.ana_processor()
@@ -43,40 +43,23 @@ my_proc.enable_event_alignment(False)
 
 
 # Set up ana for 1pi0 selection
-my_ana = ertool.ERAnaPi0All()
-my_ana.SetVerbose(False)
+my_ana = ertool.ERAna1Pi0KinVar()
+my_ana.SetReco(True)
 
-# Set up ana for resolution
-#my_ana_res = ertool.ERAnaPi0GunEff()
-my_ana_res = ertool. ERAnarecotopo()
-
-# First lets make a filter that looks for a certain events
-pi0_topo = fmwk.effpi0();
-# 0 == inclusive 1 == 1pi0&&nopi+/-
-pi0_topo.SetTopology(1);
-# 0 == ntsignal 1 == signal
-pi0_topo.SignalTopology(1);
-# 0 == CC 1 == NC 
-pi0_topo.SetCCNC(1);
-pi0_topo.SetFVCut(17) #17);
-pi0_topo.SetEnergyCut(20) #20);
-pi0_topo.SetContainment(0) #0.05);
+#Here is a filter
+CosmicMC = fmwk.MCCosmics();
+#pi0_topoMC.SetSignal(False)
+#pi0_topoMC.SetBothCCNC(True)
+#pi0_topoMC.SetTopology(1)
+#pi0_topoMC.SetFiducial(17)
 
 
 
-pi0_topoMC = fmwk.MCTopo();
-pi0_topoMC.SetCCNC(1)
-pi0_topoMC.SetTopology(1)
-pi0_topoMC.SetFiducial(17)
-
-
-
-#my_anaunit._mgr.AddAna(my_ana)
 #my_anaunit._mgr.AddAlgo(my_algo)
-my_anaunit._mgr.AddAna(my_ana_res)
 #my_anaunit._mgr.AddAlgo(my_algo2)
 #my_anaunit._mgr.AddAlgo(my_algo3)
 #my_anaunit._mgr.AddAlgo(my_algo4)
+my_anaunit._mgr.AddAna(my_ana)
 my_anaunit._mgr._training_mode =False
 
 
@@ -89,9 +72,9 @@ for x in xrange(len(sys.argv)-1):
 my_proc.set_io_mode(fmwk.storage_manager.kBOTH)
 
 # Specify output root file name
-my_proc.set_ana_output_file("testana.root")
+my_proc.set_ana_output_file("test.root")
 
-my_proc.set_output_file("testout.root")
+my_proc.set_output_file("outtest.root")
 
 
 # here set E-cut for Helper & Ana modules
@@ -107,8 +90,8 @@ my_anaunit._mgr._mc_for_ana = True
 #my_anaunit.SetTrackProducer(False,"stitchkalmanhit");
 #my_anaunit.SetVtxProducer(True,"generator");
 #my_anaunit.SetShowerProducer(False,"showerrecofuzzy");
-my_anaunit.SetShowerProducer(False,"showerreco");
-#my_anaunit.SetShowerProducer(True,"mcreco");
+#my_anaunit.SetShowerProducer(False,"showerreco");
+my_anaunit.SetShowerProducer(True,"mcreco");
 my_anaunit.SetTrackProducer(True,"mcreco");
 #my_anaunit.SetVtxProducer(True,"generator");
 #my_anaunit.SetShowerProducer(False,"showerrecofuzzy");
@@ -116,13 +99,12 @@ my_anaunit.SetTrackProducer(True,"mcreco");
 #my_anaunit.SetVtxProducer(False,"");
 # ************************************************
 
-my_proc.add_process(pi0_topoMC)
-my_proc.add_process(pi0_topo)
-#my_proc.add_process(my_anaunit)
+my_proc.add_process(CosmicMC)
+my_proc.add_process(my_anaunit)
 
 
 
-my_proc.run()
+my_proc.run(0,1000)
 
 
 # done!
