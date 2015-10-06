@@ -13,7 +13,6 @@ if len(sys.argv) < 2:
 # Create algorithm
 
 my_algo = ertool.AlgoPi0()
-my_algo.setVerbose(False)
 my_algo.setMinShrEnergy(20)
 my_algo.setMaxShrEnergy(1000)
 my_algo.setIPMax(10)
@@ -33,7 +32,6 @@ my_algo3.setMaxIP(5)
 my_algo4 = ertool.ERAlgoPrimaryPi0()
 my_algo4.SetMinDistVtx(50)
 my_algo4.SetMinDistEnd(50)
-my_algo4.SetVerbose(True)
 
 # Create MC filter
 my_anaunit = fmwk.Pi0Reco()#ExampleERSelection()
@@ -89,8 +87,8 @@ my_anaunit._mgr._mc_for_ana = True
 #my_anaunit.SetTrackProducer(False,"stitchkalmanhit");
 #my_anaunit.SetVtxProducer(True,"generator");
 #my_anaunit.SetShowerProducer(False,"showerrecofuzzy");
-my_anaunit.SetShowerProducer(False,"showerreco");
-#my_anaunit.SetShowerProducer(True,"mcreco");
+#my_anaunit.SetShowerProducer(False,"showerreco");
+my_anaunit.SetShowerProducer(True,"mcreco");
 my_anaunit.SetTrackProducer(True,"mcreco");
 #my_anaunit.SetVtxProducer(True,"generator");
 #my_anaunit.SetShowerProducer(False,"showerrecofuzzy");
